@@ -283,6 +283,9 @@ EOF;
         // Install Inertia...
         $this->requireComposerPackages('inertiajs/inertia-laravel:^0.5.2', 'tightenco/ziggy:^1.0');
 
+        // [inertia-i18n] Install Laravel Lang Publiser
+        $this->requireDevComposerPackages('laravel-lang/lang:^10.4', 'laravel-lang/publisher:^12.2');
+
         // Install NPM packages...
         $this->updateNodePackages(function ($packages) {
             return [
@@ -299,8 +302,28 @@ EOF;
             ] + $packages;
         });
 
+        // [inertia-i18n] Install vue-i18n package "dependencies"
+        $this->updateNodePackages(function ($packages) {
+            return [
+                'vue-i18n' => '^9.1.9',
+            ] + $packages;
+        }, false);
+
         // Sanctum...
         (new Process([$this->phpBinary(), 'artisan', 'vendor:publish', '--provider=Laravel\Sanctum\SanctumServiceProvider', '--force'], base_path()))
+                ->setTimeout(null)
+                ->run(function ($type, $output) {
+                    $this->output->write($output);
+                });
+
+        // [inertia-i18n] Add locales
+        $locale = config('app.locale');
+        $fallbackLocale = config('app.fallback_locale');
+        $command = [$this->phpBinary(), 'artisan', 'lang:add', $locale];
+        if ($locale !== $fallbackLocale) {
+            $command[] = $fallbackLocale;
+        }
+        (new Process($command, base_path()))
                 ->setTimeout(null)
                 ->run(function ($type, $output) {
                     $this->output->write($output);
@@ -560,6 +583,32 @@ EOF;
 
         $command = array_merge(
             $command ?? ['composer', 'require'],
+            is_array($packages) ? $packages : func_get_args()
+        );
+
+        (new Process($command, base_path(), ['COMPOSER_MEMORY_LIMIT' => '-1']))
+            ->setTimeout(null)
+            ->run(function ($type, $output) {
+                $this->output->write($output);
+            });
+    }
+
+    /**
+     * Installs the given Composer Packages into the application.
+     *
+     * @param  mixed  $packages
+     * @return void
+     */
+    protected function requireDevComposerPackages($packages)
+    {
+        $composer = $this->option('composer');
+
+        if ($composer !== 'global') {
+            $command = [$this->phpBinary(), $composer, 'require', '--dev'];
+        }
+
+        $command = array_merge(
+            $command ?? ['composer', 'require', '--dev'],
             is_array($packages) ? $packages : func_get_args()
         );
 

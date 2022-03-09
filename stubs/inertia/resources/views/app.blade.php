@@ -14,6 +14,10 @@
 
         <!-- Scripts -->
         @routes
+        <script>
+            var __locale = '{{ app()->getLocale() }}';
+            var __fallback_locale = '{{ app()->getFallbackLocale() }}';
+        </script>
         <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">

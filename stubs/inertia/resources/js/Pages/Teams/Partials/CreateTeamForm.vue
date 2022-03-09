@@ -1,16 +1,16 @@
 <template>
     <jet-form-section @submitted="createTeam">
         <template #title>
-            Team Details
+            {{ $t('Team Details') }}
         </template>
 
         <template #description>
-            Create a new team to collaborate with others on projects.
+            {{ $t('Create a new team to collaborate with others on projects.') }}
         </template>
 
         <template #form>
             <div class="col-span-6">
-                <jet-label value="Team Owner" />
+                <jet-label :value="$t('Team Owner')" />
 
                 <div class="flex items-center mt-2">
                     <img class="object-cover w-12 h-12 rounded-full" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name">
@@ -23,7 +23,7 @@
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <jet-label for="name" value="Team Name" />
+                <jet-label for="name" :value="$t('Team Name')" />
                 <jet-input id="name" type="text" class="block w-full mt-1" v-model="form.name" autofocus />
                 <jet-input-error :message="form.errors.name" class="mt-2" />
             </div>
@@ -31,7 +31,7 @@
 
         <template #actions>
             <jet-button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Create
+                {{ $t('Create') }}
             </jet-button>
         </template>
     </jet-form-section>

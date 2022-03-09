@@ -1,5 +1,5 @@
 <template>
-    <Head title="Terms of Service" />
+    <Head :title="$('Terms of Service')" />
 
     <div class="font-sans text-gray-900 antialiased">
         <div class="pt-4 bg-gray-100">

@@ -22,6 +22,8 @@ class UpdateTeamName implements UpdatesTeamNames
 
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
+        ], [], [
+            'name' => __('Team Name'),
         ])->validateWithBag('updateTeamName');
 
         $team->forceFill([
