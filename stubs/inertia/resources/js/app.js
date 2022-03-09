@@ -8,7 +8,7 @@ import { createI18n } from 'vue-i18n';
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 async function loadAndConvertMessages(locale) {
-    const messages = await import(`../lang/${locale}.json`);
+    const messages = await import(`LANG_PATH/${locale}.json`);
     var msgObj = {};
     Object.entries(messages).forEach(([key, value]) => {
         msgObj[key] = String(value).replace(/:([a-zA-Z_]+)/g, "{$1}");
