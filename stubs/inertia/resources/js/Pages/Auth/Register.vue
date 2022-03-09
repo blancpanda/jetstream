@@ -1,5 +1,5 @@
 <template>
-    <Head :title="$t(Register)" />
+    <Head :title="$t('Register')" />
 
     <jet-authentication-card>
         <template #logo>
