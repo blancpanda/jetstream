@@ -410,7 +410,7 @@ EOF;
 
         // Replace path to lang
         $langPath = function_exists('lang_path') ? lang_path() : resource_path('lang');
-        $langRelativePath = $this->getRelativePath(resource_path('/js/app.js'), $langPath);
+        $langRelativePath = $this->getRelativePath(resource_path('js/app.js'), $langPath);
         $this->replaceInFile('LANG_PATH', $langRelativePath, resource_path('js/app.js'));
 
         // Flush node_modules...
