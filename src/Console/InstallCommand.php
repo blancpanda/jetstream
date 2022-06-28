@@ -295,7 +295,7 @@ EOF;
         $this->requireComposerPackages('inertiajs/inertia-laravel:^0.5.2', 'tightenco/ziggy:^1.0');
 
         // [inertia-i18n] Install Laravel Lang Publiser
-        $this->requireDevComposerPackages('laravel-lang/lang:^10.4', 'laravel-lang/publisher:^12.2');
+        $this->requireComposerDevPackages('laravel-lang/lang:^10.4', 'laravel-lang/publisher:^12.2');
 
         // Install NPM packages...
         $this->updateNodePackages(function ($packages) {
