@@ -13,7 +13,7 @@ const appName =
 
 function loadLocaleMassages() {
   var messages = {}
-  const resources = import.meta.glob('../../lang/*.json', { as: 'raw' })
+  const resources = import.meta.glob('LANG_PATH*.json', { as: 'raw' })
   Object.entries(resources).forEach(([path, raw]) => {
     const lang = path.match(/([^/]+)\.json$/)[1]
     var langMsg = JSON.parse(raw)
