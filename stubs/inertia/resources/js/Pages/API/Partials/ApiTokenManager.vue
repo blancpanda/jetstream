@@ -194,7 +194,7 @@ const deleteApiToken = () => {
         </JetDialogModal>
 
         <!-- API Token Permissions Modal -->
-        <JetDialogModal :show="managingPermissionsFor" @close="managingPermissionsFor = null">
+        <JetDialogModal :show="managingPermissionsFor != null" @close="managingPermissionsFor = null">
             <template #title>
                 {{ $t('API Token Permissions') }}
             </template>
@@ -227,7 +227,7 @@ const deleteApiToken = () => {
         </JetDialogModal>
 
         <!-- Delete Token Confirmation Modal -->
-        <JetConfirmationModal :show="apiTokenBeingDeleted" @close="apiTokenBeingDeleted = null">
+        <JetConfirmationModal :show="apiTokenBeingDeleted != null" @close="apiTokenBeingDeleted = null">
             <template #title>
                 {{ $t('Delete API Token') }}
             </template>

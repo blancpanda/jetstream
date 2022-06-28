@@ -1,54 +1,79 @@
 <script setup>
-import { computed } from 'vue';
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
-import JetButton from '@/Jetstream/Button.vue';
+import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue'
+import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue'
+import JetButton from '@/Jetstream/Button.vue'
+import { Head, Link, useForm } from '@inertiajs/inertia-vue3'
+import { computed } from 'vue'
 
 const props = defineProps({
-    status: String,
-});
+  status: String,
+})
 
-const form = useForm();
+const form = useForm()
 
 const submit = () => {
-    form.post(route('verification.send'));
-};
+  form.post(route('verification.send'))
+}
 
-const verificationLinkSent = computed(() => props.status === 'verification-link-sent');
+const verificationLinkSent = computed(
+  () => props.status === 'verification-link-sent',
+)
 </script>
 
 <template>
-    <Head title="Email Verification" />
+  <Head title="Email Verification" />
 
-    <JetAuthenticationCard>
-        <template #logo>
-            <JetAuthenticationCardLogo />
-        </template>
+  <JetAuthenticationCard>
+    <template #logo>
+      <JetAuthenticationCardLogo />
+    </template>
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{ $t("Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.") }}
+    <div class="mb-4 text-sm text-gray-600">
+      {{
+        $t(
+          "Before continuing, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.",
+        )
+      }}
+    </div>
+
+    <div
+      v-if="verificationLinkSent"
+      class="mb-4 font-medium text-sm text-green-600"
+    >
+      {{
+        $t(
+          'A new verification link has been sent to the email address you provided during registration.',
+        )
+      }}
+    </div>
+
+    <form @submit.prevent="submit">
+      <div class="mt-4 flex items-center justify-between">
+        <JetButton
+          :class="{ 'opacity-25': form.processing }"
+          :disabled="form.processing"
+        >
+          {{ $t('Resend Verification Email') }}
+        </JetButton>
+
+        <div>
+          <Link
+            :href="route('profile.show')"
+            class="underline text-sm text-gray-600 hover:text-gray-900"
+          >
+            {{ $t('Edit Profile') }}
+          </Link>
+
+          <Link
+            :href="route('logout')"
+            method="post"
+            as="button"
+            class="underline text-sm text-gray-600 hover:text-gray-900 ml-2"
+          >
+            {{ $t('Log Out') }}
+          </Link>
         </div>
-
-        <div v-if="verificationLinkSent" class="mb-4 font-medium text-sm text-green-600">
-            {{ $t('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div class="mt-4 flex items-center justify-between">
-                <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    {{ $t('Resend Verification Email') }}
-                </JetButton>
-
-                <Link
-                    :href="route('logout')"
-                    method="post"
-                    as="button"
-                    class="underline text-sm text-gray-600 hover:text-gray-900"
-                >
-                    {{ $t('Log Out') }}
-                </Link>
-            </div>
-        </form>
-    </JetAuthenticationCard>
+      </div>
+    </form>
+  </JetAuthenticationCard>
 </template>

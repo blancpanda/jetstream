@@ -1,6 +1,91 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/jetstream/compare/v2.6.8...2.x)
+## [Unreleased](https://github.com/laravel/jetstream/compare/v2.8.4...2.x)
+
+## [v2.8.4](https://github.com/laravel/jetstream/compare/v2.8.3...v2.8.4) - 2022-06-01
+
+### Changed
+
+- Skip tests for team invitations if disabled by @jradtilbrook in https://github.com/laravel/jetstream/pull/1063
+- Display available stack options by @jessarcher in https://github.com/laravel/jetstream/pull/1062
+
+## [v2.8.3](https://github.com/laravel/jetstream/compare/v2.8.2...v2.8.3) - 2022-05-30
+
+### Changed
+
+- Switch to ESM imports by @jessarcher in https://github.com/laravel/jetstream/pull/1059
+- Bump tailwindcss/forms to 0.5.0 by @driesvints in https://github.com/laravel/jetstream/pull/1061
+- Simplify Tailwind installation by @jessarcher in https://github.com/laravel/jetstream/pull/1060
+
+## [v2.8.2](https://github.com/laravel/jetstream/compare/v2.8.1...v2.8.2) - 2022-05-24
+
+### Fixed
+
+- Fixed an issue causing warning when clicking on Manage Permissions or Delete on created token. by @ravibpatel in https://github.com/laravel/jetstream/pull/1056
+
+## [v2.8.1](https://github.com/laravel/jetstream/compare/v2.8.0...v2.8.1) - 2022-05-13
+
+### Fixed
+
+- Fix disabled email verification mode by @driesvints in https://github.com/laravel/jetstream/pull/1053
+
+## [v2.8.0](https://github.com/laravel/jetstream/compare/v2.7.5...v2.8.0) - 2022-05-10
+
+### Added
+
+- Verification improvements by @driesvints in https://github.com/laravel/jetstream/pull/1048
+
+## [v2.7.5](https://github.com/laravel/jetstream/compare/v2.7.4...v2.7.5) - 2022-04-25
+
+### Fixed
+
+- Fix banner not showing again if dismissed by the user by @LucaRed in https://github.com/laravel/jetstream/pull/1045
+
+## [v2.7.4](https://github.com/laravel/jetstream/compare/v2.7.3...v2.7.4) - 2022-04-19
+
+### Changed
+
+- Install pest as devDependency by @abenerd in https://github.com/laravel/jetstream/pull/1040
+
+## [v2.7.3](https://github.com/laravel/jetstream/compare/v2.7.2...v2.7.3) - 2022-04-08
+
+### Fixed
+
+- Fix parse error caused by alpine shorthand on dynamic-component by @authanram in https://github.com/laravel/jetstream/pull/1032
+- Fix error handling during 2FA confirmation by @ManuelLeiner in https://github.com/laravel/jetstream/pull/1030
+- Fix if user logs out when viewing the 2FA Form by @jjhamkuijpers in https://github.com/laravel/jetstream/pull/1034
+
+## [v2.7.2](https://github.com/laravel/jetstream/compare/v2.7.1...v2.7.2) - 2022-04-03
+
+### Fixed
+
+- Use Alpine's @click.prevent for switching teams by @jrd-lewis in https://github.com/laravel/jetstream/pull/1027
+
+## [v2.7.1](https://github.com/laravel/jetstream/compare/v2.7.0...v2.7.1) - 2022-03-30
+
+### Fixed
+
+- Not require `Ziggy` on `ShareInertiaData` middleware. by @xiCO2k in https://github.com/laravel/jetstream/pull/1024
+
+## [v2.7.0](https://github.com/laravel/jetstream/compare/v2.6.8...v2.7.0) - 2022-03-29
+
+### Added
+
+- Confirm 2FA when enabling by @driesvints & @taylorotwell in https://github.com/laravel/jetstream/pull/992
+- 2FA Setup Key by @ps-sean in https://github.com/laravel/jetstream/pull/1008
+- Add Inertia SSR Support by @xiCO2k in https://github.com/laravel/jetstream/pull/1012
+
+### Changed
+
+- Match Inertia Scaffolding with Livewire in regards to AuthenticateSessions by @taylorotwell in https://github.com/laravel/jetstream/pull/1003
+- Change Inertia Stubs to Composition API by @xiCO2k in https://github.com/laravel/jetstream/pull/1001
+- Remove return in ensurePasswordIsConfirmed by @driesvints in https://github.com/laravel/jetstream/pull/1006
+- Use `.alias` method from `Mix` by @xiCO2k in https://github.com/laravel/jetstream/pull/1009
+
+### Fixed
+
+- Fix stub tests by @driesvints in https://github.com/laravel/jetstream/pull/1014
+- Prioritize 'accepted' validation rule for terms checkbox in CreateNewUserWithTeams.php by @ChrisRiddell in https://github.com/laravel/jetstream/pull/1019
 
 ## [v2.6.8](https://github.com/laravel/jetstream/compare/v2.6.7...v2.6.8) - 2022-03-15
 
