@@ -308,8 +308,10 @@ EOF;
                 '@tailwindcss/typography' => '^0.5.2',
                 '@vitejs/plugin-vue' => '^2.3.3',
                 'autoprefixer' => '^10.4.7',
+                'laravel-vite-plugin' => '^0.2.3',
                 'postcss' => '^8.4.14',
                 'tailwindcss' => '^3.1.0',
+                'vite' => '^2.9.13',
                 'vue' => '^3.2.31',
             ] + $packages;
         });
