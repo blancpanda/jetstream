@@ -11,17 +11,18 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
 const appName =
   window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
 
-function loadLocaleMassages() {
+async function loadLocaleMassages() {
   var messages = {}
   const resources = import.meta.glob('LANG_PATH*.json', { as: 'raw' })
-  Object.entries(resources).forEach(([path, raw]) => {
+  for (const path in resources) {
+    const raw = await resources[path]()
     const lang = path.match(/([^/]+)\.json$/)[1]
     var langMsg = JSON.parse(raw)
     Object.entries(langMsg).forEach(([key, value]) => {
       langMsg[key] = String(value).replace(/:(\w+)/g, '{$1}')
     })
     messages[lang] = langMsg
-  })
+  }
   return messages
 }
 
@@ -32,13 +33,13 @@ createInertiaApp({
       `./Pages/${name}.vue`,
       import.meta.glob('./Pages/**/*.vue'),
     ),
-  setup({ el, app, props, plugin }) {
+  async setup({ el, app, props, plugin }) {
     const i18n = createI18n({
       legacy: false,
       globalInjection: true,
       locale: __locale,
       fallbackLocale: __fallback_locale,
-      messages: loadLocaleMassages(),
+      messages: await loadLocaleMassages(),
     })
 
     return createApp({ render: () => h(app, props) })
