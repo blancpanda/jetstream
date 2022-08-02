@@ -11,7 +11,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
 const appName =
   window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
 
-async function loadLocaleMassages() {
+async function loadLocaleMessages() {
   var messages = {}
   const resources = import.meta.glob('LANG_PATH*.json', { as: 'raw' })
   for (const path in resources) {
@@ -39,7 +39,7 @@ createInertiaApp({
       globalInjection: true,
       locale: __locale,
       fallbackLocale: __fallback_locale,
-      messages: await loadLocaleMassages(),
+      messages: await loadLocaleMessages(),
     })
 
     return createApp({ render: () => h(app, props) })
