@@ -1,12 +1,12 @@
 <script setup>
-import JetActionSection from '@/Jetstream/ActionSection.vue'
-import JetButton from '@/Jetstream/Button.vue'
-import JetConfirmsPassword from '@/Jetstream/ConfirmsPassword.vue'
-import JetDangerButton from '@/Jetstream/DangerButton.vue'
-import JetInput from '@/Jetstream/Input.vue'
-import JetInputError from '@/Jetstream/InputError.vue'
-import JetLabel from '@/Jetstream/Label.vue'
-import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
+import ActionSection from '@/Components/ActionSection.vue'
+import ConfirmsPassword from '@/Components/ConfirmsPassword.vue'
+import DangerButton from '@/Components/DangerButton.vue'
+import InputError from '@/Components/InputError.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import SecondaryButton from '@/Components/SecondaryButton.vue'
+import TextInput from '@/Components/TextInput.vue'
 import { Inertia } from '@inertiajs/inertia'
 import { useForm, usePage } from '@inertiajs/inertia-vue3'
 import { computed, ref, watch } from 'vue'
@@ -104,7 +104,7 @@ const disableTwoFactorAuthentication = () => {
 </script>
 
 <template>
-  <JetActionSection>
+  <ActionSection>
     <template #title>
       {{ $t('Two Factor Authentication') }}
     </template>
@@ -168,7 +168,7 @@ const disableTwoFactorAuthentication = () => {
 
           <div class="mt-4" v-html="qrCode" />
 
-          <div class="mt-4 max-w-xl text-sm text-gray-600" v-if="setupKey">
+          <div v-if="setupKey" class="mt-4 max-w-xl text-sm text-gray-600">
             <p class="font-semibold">
               Setup Key:
               <span v-html="setupKey"></span>
@@ -176,9 +176,9 @@ const disableTwoFactorAuthentication = () => {
           </div>
 
           <div v-if="confirming" class="mt-4">
-            <JetLabel for="code" :value="$t('Code')" />
+            <InputLabel for="code" :value="$t('Code')" />
 
-            <JetInput
+            <TextInput
               id="code"
               v-model="confirmationForm.code"
               type="text"
@@ -190,10 +190,7 @@ const disableTwoFactorAuthentication = () => {
               @keyup.enter="confirmTwoFactorAuthentication"
             />
 
-            <JetInputError
-              :message="confirmationForm.errors.code"
-              class="mt-2"
-            />
+            <InputError :message="confirmationForm.errors.code" class="mt-2" />
           </div>
         </div>
 
@@ -220,20 +217,20 @@ const disableTwoFactorAuthentication = () => {
 
       <div class="mt-5">
         <div v-if="!twoFactorEnabled">
-          <JetConfirmsPassword @confirmed="enableTwoFactorAuthentication">
-            <JetButton
+          <ConfirmsPassword @confirmed="enableTwoFactorAuthentication">
+            <PrimaryButton
               type="button"
               :class="{ 'opacity-25': enabling }"
               :disabled="enabling"
             >
               {{ $t('Enable') }}
-            </JetButton>
-          </JetConfirmsPassword>
+            </PrimaryButton>
+          </ConfirmsPassword>
         </div>
 
         <div v-else>
-          <JetConfirmsPassword @confirmed="confirmTwoFactorAuthentication">
-            <JetButton
+          <ConfirmsPassword @confirmed="confirmTwoFactorAuthentication">
+            <PrimaryButton
               v-if="confirming"
               type="button"
               class="mr-3"
@@ -241,48 +238,48 @@ const disableTwoFactorAuthentication = () => {
               :disabled="enabling"
             >
               {{ $t('Confirm') }}
-            </JetButton>
-          </JetConfirmsPassword>
+            </PrimaryButton>
+          </ConfirmsPassword>
 
-          <JetConfirmsPassword @confirmed="regenerateRecoveryCodes">
-            <JetSecondaryButton
+          <ConfirmsPassword @confirmed="regenerateRecoveryCodes">
+            <SecondaryButton
               v-if="recoveryCodes.length > 0 && !confirming"
               class="mr-3"
             >
               {{ $t('Regenerate Recovery Codes') }}
-            </JetSecondaryButton>
-          </JetConfirmsPassword>
+            </SecondaryButton>
+          </ConfirmsPassword>
 
-          <JetConfirmsPassword @confirmed="showRecoveryCodes">
-            <JetSecondaryButton
+          <ConfirmsPassword @confirmed="showRecoveryCodes">
+            <SecondaryButton
               v-if="recoveryCodes.length === 0 && !confirming"
               class="mr-3"
             >
               {{ $t('Show Recovery Codes') }}
-            </JetSecondaryButton>
-          </JetConfirmsPassword>
+            </SecondaryButton>
+          </ConfirmsPassword>
 
-          <JetConfirmsPassword @confirmed="disableTwoFactorAuthentication">
-            <JetSecondaryButton
+          <ConfirmsPassword @confirmed="disableTwoFactorAuthentication">
+            <SecondaryButton
               v-if="confirming"
               :class="{ 'opacity-25': disabling }"
               :disabled="disabling"
             >
               {{ $t('Cancel') }}
-            </JetSecondaryButton>
-          </JetConfirmsPassword>
+            </SecondaryButton>
+          </ConfirmsPassword>
 
-          <JetConfirmsPassword @confirmed="disableTwoFactorAuthentication">
-            <JetDangerButton
+          <ConfirmsPassword @confirmed="disableTwoFactorAuthentication">
+            <DangerButton
               v-if="!confirming"
               :class="{ 'opacity-25': disabling }"
               :disabled="disabling"
             >
               {{ $t('Disable') }}
-            </JetDangerButton>
-          </JetConfirmsPassword>
+            </DangerButton>
+          </ConfirmsPassword>
         </div>
       </div>
     </template>
-  </JetActionSection>
+  </ActionSection>
 </template>

@@ -1,101 +1,109 @@
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
-import JetActionSection from '@/Jetstream/ActionSection.vue';
-import JetDialogModal from '@/Jetstream/DialogModal.vue';
-import JetDangerButton from '@/Jetstream/DangerButton.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetInputError from '@/Jetstream/InputError.vue';
-import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue';
+import ActionSection from '@/Components/ActionSection.vue'
+import DangerButton from '@/Components/DangerButton.vue'
+import DialogModal from '@/Components/DialogModal.vue'
+import InputError from '@/Components/InputError.vue'
+import SecondaryButton from '@/Components/SecondaryButton.vue'
+import TextInput from '@/Components/TextInput.vue'
+import { useForm } from '@inertiajs/inertia-vue3'
+import { ref } from 'vue'
 
-const confirmingUserDeletion = ref(false);
-const passwordInput = ref(null);
+const confirmingUserDeletion = ref(false)
+const passwordInput = ref(null)
 
 const form = useForm({
-    password: '',
-});
+  password: '',
+})
 
 const confirmUserDeletion = () => {
-    confirmingUserDeletion.value = true;
+  confirmingUserDeletion.value = true
 
-    setTimeout(() => passwordInput.value.focus(), 250);
-};
+  setTimeout(() => passwordInput.value.focus(), 250)
+}
 
 const deleteUser = () => {
-    form.delete(route('current-user.destroy'), {
-        preserveScroll: true,
-        onSuccess: () => closeModal(),
-        onError: () => passwordInput.value.focus(),
-        onFinish: () => form.reset(),
-    });
-};
+  form.delete(route('current-user.destroy'), {
+    preserveScroll: true,
+    onSuccess: () => closeModal(),
+    onError: () => passwordInput.value.focus(),
+    onFinish: () => form.reset(),
+  })
+}
 
 const closeModal = () => {
-    confirmingUserDeletion.value = false;
+  confirmingUserDeletion.value = false
 
-    form.reset();
-};
+  form.reset()
+}
 </script>
 
 <template>
-    <JetActionSection>
-        <template #title>
-            {{ $t('Delete Account') }}
-        </template>
+  <ActionSection>
+    <template #title>
+      {{ $t('Delete Account') }}
+    </template>
 
-        <template #description>
-            {{ $t('Permanently delete your account.') }}
+    <template #description>
+      {{ $t('Permanently delete your account.') }}
+    </template>
+
+    <template #content>
+      <div class="max-w-xl text-sm text-gray-600">
+        {{
+          $t(
+            'Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.',
+          )
+        }}
+      </div>
+
+      <div class="mt-5">
+        <DangerButton @click="confirmUserDeletion">
+          {{ $t('Delete Account') }}
+        </DangerButton>
+      </div>
+
+      <!-- Delete Account Confirmation Modal -->
+      <DialogModal :show="confirmingUserDeletion" @close="closeModal">
+        <template #title>
+          {{ $t('Delete Account') }}
         </template>
 
         <template #content>
-            <div class="max-w-xl text-sm text-gray-600">
-                {{ $t('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
-            </div>
+          {{
+            $t(
+              'Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.',
+            )
+          }}
 
-            <div class="mt-5">
-                <JetDangerButton @click="confirmUserDeletion">
-                    {{ $t('Delete Account') }}
-                </JetDangerButton>
-            </div>
+          <div class="mt-4">
+            <TextInput
+              ref="passwordInput"
+              v-model="form.password"
+              type="password"
+              class="mt-1 block w-3/4"
+              :placeholder="$t('Password')"
+              @keyup.enter="deleteUser"
+            />
 
-            <!-- Delete Account Confirmation Modal -->
-            <JetDialogModal :show="confirmingUserDeletion" @close="closeModal">
-                <template #title>
-                    {{ $t('Delete Account') }}
-                </template>
-
-                <template #content>
-                    {{ $t('Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
-
-                    <div class="mt-4">
-                        <JetInput
-                            ref="passwordInput"
-                            v-model="form.password"
-                            type="password"
-                            class="mt-1 block w-3/4"
-                            :placeholder="$t('Password')"
-                            @keyup.enter="deleteUser"
-                        />
-
-                        <JetInputError :message="form.errors.password" class="mt-2" />
-                    </div>
-                </template>
-
-                <template #footer>
-                    <JetSecondaryButton @click="closeModal">
-                        {{ $t('Cancel') }}
-                    </JetSecondaryButton>
-
-                    <JetDangerButton
-                        class="ml-3"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                        @click="deleteUser"
-                    >
-                        {{ $t('Delete Account') }}
-                    </JetDangerButton>
-                </template>
-            </JetDialogModal>
+            <InputError :message="form.errors.password" class="mt-2" />
+          </div>
         </template>
-    </JetActionSection>
+
+        <template #footer>
+          <SecondaryButton @click="closeModal">
+            {{ $t('Cancel') }}
+          </SecondaryButton>
+
+          <DangerButton
+            class="ml-3"
+            :class="{ 'opacity-25': form.processing }"
+            :disabled="form.processing"
+            @click="deleteUser"
+          >
+            {{ $t('Delete Account') }}
+          </DangerButton>
+        </template>
+      </DialogModal>
+    </template>
+  </ActionSection>
 </template>

@@ -1,83 +1,90 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/inertia-vue3';
-import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
-import JetButton from '@/Jetstream/Button.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetLabel from '@/Jetstream/Label.vue';
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
+import AuthenticationCard from '@/Components/AuthenticationCard.vue'
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
+import InputError from '@/Components/InputError.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import TextInput from '@/Components/TextInput.vue'
+import { Head, useForm } from '@inertiajs/inertia-vue3'
 
 const props = defineProps({
-    email: String,
-    token: String,
-});
+  email: String,
+  token: String,
+})
 
 const form = useForm({
-    token: props.token,
-    email: props.email,
-    password: '',
-    password_confirmation: '',
-});
+  token: props.token,
+  email: props.email,
+  password: '',
+  password_confirmation: '',
+})
 
 const submit = () => {
-    form.post(route('password.update'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
-};
+  form.post(route('password.update'), {
+    onFinish: () => form.reset('password', 'password_confirmation'),
+  })
+}
 </script>
 
 <template>
-    <Head :title="$t('Reset Password')" />
+  <Head :title="$t('Reset Password')" />
 
-    <JetAuthenticationCard>
-        <template #logo>
-            <JetAuthenticationCardLogo />
-        </template>
+  <AuthenticationCard>
+    <template #logo>
+      <AuthenticationCardLogo />
+    </template>
 
-        <JetValidationErrors class="mb-4" />
+    <form @submit.prevent="submit">
+      <div>
+        <InputLabel for="email" :value="$t('Email')" />
+        <TextInput
+          id="email"
+          v-model="form.email"
+          type="email"
+          class="mt-1 block w-full"
+          required
+          autofocus
+        />
+        <InputError class="mt-2" :message="form.errors.email" />
+      </div>
 
-        <form @submit.prevent="submit">
-            <div>
-                <JetLabel for="email" :value="$t('Email')" />
-                <JetInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                />
-            </div>
+      <div class="mt-4">
+        <InputLabel for="password" :value="$t('Password')" />
+        <TextInput
+          id="password"
+          v-model="form.password"
+          type="password"
+          class="mt-1 block w-full"
+          required
+          autocomplete="new-password"
+        />
+        <InputError class="mt-2" :message="form.errors.password" />
+      </div>
 
-            <div class="mt-4">
-                <JetLabel for="password" :value="$t('Password')" />
-                <JetInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
-            </div>
+      <div class="mt-4">
+        <InputLabel
+          for="password_confirmation"
+          :value="$t('Confirm Password')"
+        />
+        <TextInput
+          id="password_confirmation"
+          v-model="form.password_confirmation"
+          type="password"
+          class="mt-1 block w-full"
+          required
+          autocomplete="new-password"
+        />
+        <InputError class="mt-2" :message="form.errors.password_confirmation" />
+      </div>
 
-            <div class="mt-4">
-                <JetLabel for="password_confirmation" :value="$t('Confirm Password')" />
-                <JetInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    {{ $t('Reset Password') }}
-                </JetButton>
-            </div>
-        </form>
-    </JetAuthenticationCard>
+      <div class="flex items-center justify-end mt-4">
+        <PrimaryButton
+          :class="{ 'opacity-25': form.processing }"
+          :disabled="form.processing"
+        >
+          {{ $t('Reset Password') }}
+        </PrimaryButton>
+      </div>
+    </form>
+  </AuthenticationCard>
 </template>

@@ -1,61 +1,67 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/inertia-vue3';
-import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
-import JetButton from '@/Jetstream/Button.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetLabel from '@/Jetstream/Label.vue';
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
+import AuthenticationCard from '@/Components/AuthenticationCard.vue'
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
+import InputError from '@/Components/InputError.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import TextInput from '@/Components/TextInput.vue'
+import { Head, useForm } from '@inertiajs/inertia-vue3'
 
 defineProps({
-    status: String,
-});
+  status: String,
+})
 
 const form = useForm({
-    email: '',
-});
+  email: '',
+})
 
 const submit = () => {
-    form.post(route('password.email'));
-};
+  form.post(route('password.email'))
+}
 </script>
 
 <template>
-    <Head title="Forgot Password" />
+  <Head title="Forgot Password" />
 
-    <JetAuthenticationCard>
-        <template #logo>
-            <JetAuthenticationCardLogo />
-        </template>
+  <AuthenticationCard>
+    <template #logo>
+      <AuthenticationCardLogo />
+    </template>
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{ $t('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-        </div>
+    <div class="mb-4 text-sm text-gray-600">
+      {{
+        $t(
+          'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.',
+        )
+      }}
+    </div>
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
+    <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+      {{ status }}
+    </div>
 
-        <JetValidationErrors class="mb-4" />
+    <form @submit.prevent="submit">
+      <div>
+        <InputLabel for="email" :value="$t('Email')" />
+        <TextInput
+          id="email"
+          v-model="form.email"
+          type="email"
+          class="mt-1 block w-full"
+          required
+          autofocus
+        />
+        <InputError class="mt-2" :message="form.errors.email" />
+      </div>
 
-        <form @submit.prevent="submit">
-            <div>
-                <JetLabel for="email" :value="$t('Email')" />
-                <JetInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    {{ $t('Email Password Reset Link') }}
-                </JetButton>
-            </div>
-        </form>
-    </JetAuthenticationCard>
+      <div class="flex items-center justify-end mt-4">
+        <PrimaryButton
+          :class="{ 'opacity-25': form.processing }"
+          :disabled="form.processing"
+        >
+          {{ $t('Email Password Reset Link') }}
+        </PrimaryButton>
+      </div>
+    </form>
+  </AuthenticationCard>
 </template>

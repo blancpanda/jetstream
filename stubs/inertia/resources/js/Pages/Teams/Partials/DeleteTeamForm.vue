@@ -1,75 +1,86 @@
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
-import JetActionSection from '@/Jetstream/ActionSection.vue';
-import JetConfirmationModal from '@/Jetstream/ConfirmationModal.vue';
-import JetDangerButton from '@/Jetstream/DangerButton.vue';
-import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue';
+import ActionSection from '@/Components/ActionSection.vue'
+import ConfirmationModal from '@/Components/ConfirmationModal.vue'
+import DangerButton from '@/Components/DangerButton.vue'
+import SecondaryButton from '@/Components/SecondaryButton.vue'
+import { useForm } from '@inertiajs/inertia-vue3'
+import { ref } from 'vue'
 
 const props = defineProps({
-    team: Object,
-});
+  team: Object,
+})
 
-const confirmingTeamDeletion = ref(false);
-const form = useForm();
+const confirmingTeamDeletion = ref(false)
+const form = useForm()
 
 const confirmTeamDeletion = () => {
-    confirmingTeamDeletion.value = true;
-};
+  confirmingTeamDeletion.value = true
+}
 
 const deleteTeam = () => {
-    form.delete(route('teams.destroy', props.team), {
-        errorBag: 'deleteTeam',
-    });
-};
+  form.delete(route('teams.destroy', props.team), {
+    errorBag: 'deleteTeam',
+  })
+}
 </script>
 
 <template>
-    <JetActionSection>
-        <template #title>
-            {{ $t('Delete Team') }}
-        </template>
+  <ActionSection>
+    <template #title>
+      {{ $t('Delete Team') }}
+    </template>
 
-        <template #description>
-            {{ $t('Permanently delete this team.') }}
+    <template #description>
+      {{ $t('Permanently delete this team.') }}
+    </template>
+
+    <template #content>
+      <div class="max-w-xl text-sm text-gray-600">
+        {{
+          $t(
+            'Once a team is deleted, all of its resources and data will be permanently deleted. Before deleting this team, please download any data or information regarding this team that you wish to retain.',
+          )
+        }}
+      </div>
+
+      <div class="mt-5">
+        <DangerButton @click="confirmTeamDeletion">
+          {{ $t('Delete Team') }}
+        </DangerButton>
+      </div>
+
+      <!-- Delete Team Confirmation Modal -->
+      <ConfirmationModal
+        :show="confirmingTeamDeletion"
+        @close="confirmingTeamDeletion = false"
+      >
+        <template #title>
+          {{ $t('Delete Team') }}
         </template>
 
         <template #content>
-            <div class="max-w-xl text-sm text-gray-600">
-                {{ $t('Once a team is deleted, all of its resources and data will be permanently deleted. Before deleting this team, please download any data or information regarding this team that you wish to retain.') }}
-            </div>
-
-            <div class="mt-5">
-                <JetDangerButton @click="confirmTeamDeletion">
-                    {{ $t('Delete Team') }}
-                </JetDangerButton>
-            </div>
-
-            <!-- Delete Team Confirmation Modal -->
-            <JetConfirmationModal :show="confirmingTeamDeletion" @close="confirmingTeamDeletion = false">
-                <template #title>
-                    {{ $t('Delete Team') }}
-                </template>
-
-                <template #content>
-                    {{ $t('Are you sure you want to delete this team? Once a team is deleted, all of its resources and data will be permanently deleted.') }}
-                </template>
-
-                <template #footer>
-                    <JetSecondaryButton @click="confirmingTeamDeletion = false">
-                        {{ $t('Cancel') }}
-                    </JetSecondaryButton>
-
-                    <JetDangerButton
-                        class="ml-3"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                        @click="deleteTeam"
-                    >
-                        {{ $t('Delete Team') }}
-                    </JetDangerButton>
-                </template>
-            </JetConfirmationModal>
+          {{
+            $t(
+              'Are you sure you want to delete this team? Once a team is deleted, all of its resources and data will be permanently deleted.',
+            )
+          }}
         </template>
-    </JetActionSection>
+
+        <template #footer>
+          <SecondaryButton @click="confirmingTeamDeletion = false">
+            {{ $t('Cancel') }}
+          </SecondaryButton>
+
+          <DangerButton
+            class="ml-3"
+            :class="{ 'opacity-25': form.processing }"
+            :disabled="form.processing"
+            @click="deleteTeam"
+          >
+            {{ $t('Delete Team') }}
+          </DangerButton>
+        </template>
+      </ConfirmationModal>
+    </template>
+  </ActionSection>
 </template>

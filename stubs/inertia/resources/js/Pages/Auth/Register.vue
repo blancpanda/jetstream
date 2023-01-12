@@ -1,115 +1,150 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
-import JetButton from '@/Jetstream/Button.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetCheckbox from '@/Jetstream/Checkbox.vue';
-import JetLabel from '@/Jetstream/Label.vue';
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
+import AuthenticationCard from '@/Components/AuthenticationCard.vue'
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
+import Checkbox from '@/Components/Checkbox.vue'
+import InputError from '@/Components/InputError.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import TextInput from '@/Components/TextInput.vue'
+import { Head, Link, useForm } from '@inertiajs/inertia-vue3'
 
 const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-    terms: false,
-});
+  name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
+  terms: false,
+})
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
-};
+  form.post(route('register'), {
+    onFinish: () => form.reset('password', 'password_confirmation'),
+  })
+}
 </script>
 
 <template>
-    <Head :title="$t('Register')" />
+  <Head :title="$t('Register')" />
 
-    <JetAuthenticationCard>
-        <template #logo>
-            <JetAuthenticationCardLogo />
-        </template>
+  <AuthenticationCard>
+    <template #logo>
+      <AuthenticationCardLogo />
+    </template>
 
-        <JetValidationErrors class="mb-4" />
+    <form @submit.prevent="submit">
+      <div>
+        <InputLabel for="name" :value="$t('Name')" />
+        <TextInput
+          id="name"
+          v-model="form.name"
+          type="text"
+          class="mt-1 block w-full"
+          required
+          autofocus
+          autocomplete="name"
+        />
+        <InputError class="mt-2" :message="form.errors.name" />
+      </div>
 
-        <form @submit.prevent="submit">
-            <div>
-                <JetLabel for="name" :value="$t('Name')" />
-                <JetInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
+      <div class="mt-4">
+        <InputLabel for="email" :value="$t('Email')" />
+        <TextInput
+          id="email"
+          v-model="form.email"
+          type="email"
+          class="mt-1 block w-full"
+          required
+        />
+        <InputError class="mt-2" :message="form.errors.email" />
+      </div>
+
+      <div class="mt-4">
+        <InputLabel for="password" :value="$t('Password')" />
+        <TextInput
+          id="password"
+          v-model="form.password"
+          type="password"
+          class="mt-1 block w-full"
+          required
+          autocomplete="new-password"
+        />
+        <InputError class="mt-2" :message="form.errors.password" />
+      </div>
+
+      <div class="mt-4">
+        <InputLabel
+          for="password_confirmation"
+          :value="$t('Confirm Password')"
+        />
+        <TextInput
+          id="password_confirmation"
+          v-model="form.password_confirmation"
+          type="password"
+          class="mt-1 block w-full"
+          required
+          autocomplete="new-password"
+        />
+        <InputError class="mt-2" :message="form.errors.password_confirmation" />
+      </div>
+
+      <div
+        v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature"
+        class="mt-4"
+      >
+        <InputLabel for="terms">
+          <div class="flex items-center">
+            <Checkbox
+              id="terms"
+              v-model:checked="form.terms"
+              name="terms"
+              required
+            />
+
+            <div class="ml-2">
+              <i18n-t
+                keypath="I agree to the :terms_of_service and :privacy_policy"
+              >
+                <template #terms_of_service>
+                  <a
+                    target="_blank"
+                    :href="route('terms.show')"
+                    class="underline text-sm text-gray-600 hover:text-gray-900"
+                  >
+                    {{ $t('Terms of Service') }}
+                  </a>
+                </template>
+                <template #privacy_policy>
+                  <a
+                    target="_blank"
+                    :href="route('policy.show')"
+                    class="underline text-sm text-gray-600 hover:text-gray-900"
+                  >
+                    {{ $t('Privacy Policy') }}
+                  </a>
+                </template>
+              </i18n-t>
             </div>
+          </div>
+          <InputError class="mt-2" :message="form.errors.terms" />
+        </InputLabel>
+      </div>
 
-            <div class="mt-4">
-                <JetLabel for="email" :value="$t('Email')" />
-                <JetInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                />
-            </div>
+      <div class="flex items-center justify-end mt-4">
+        <Link
+          :href="route('login')"
+          class="underline text-sm text-gray-600 hover:text-gray-900"
+        >
+          {{ $t('Already registered?') }}
+        </Link>
 
-            <div class="mt-4">
-                <JetLabel for="password" :value="$t('Password')" />
-                <JetInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
-            </div>
-
-            <div class="mt-4">
-                <JetLabel for="password_confirmation" :value="$t('Confirm Password')" />
-                <JetInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
-            </div>
-
-            <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
-                <JetLabel for="terms">
-                    <div class="flex items-center">
-                        <JetCheckbox id="terms" v-model:checked="form.terms" name="terms" />
-
-                        <div class="ml-2">
-                            <i18n-t keypath="I agree to the :terms_of_service and :privacy_policy">
-                                <template #terms_of_service>
-                                    <a target="_blank" :href="route('terms.show')" class="underline text-sm text-gray-600 hover:text-gray-900">{{ $t('Terms of Service') }}</a>
-                                </template>
-                                <template #privacy_policy>
-                                    <a target="_blank" :href="route('policy.show')" class="underline text-sm text-gray-600 hover:text-gray-900">{{ $t('Privacy Policy') }}</a>
-                                </template>
-                            </i18n-t>
-                        </div>
-                    </div>
-                </JetLabel>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    {{ $t('Already registered?') }}
-                </Link>
-
-                <JetButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    {{ $t('Register') }}
-                </JetButton>
-            </div>
-        </form>
-    </JetAuthenticationCard>
+        <PrimaryButton
+          class="ml-4"
+          :class="{ 'opacity-25': form.processing }"
+          :disabled="form.processing"
+        >
+          {{ $t('Register') }}
+        </PrimaryButton>
+      </div>
+    </form>
+  </AuthenticationCard>
 </template>

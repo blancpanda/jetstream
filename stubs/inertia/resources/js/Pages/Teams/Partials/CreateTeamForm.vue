@@ -1,66 +1,73 @@
 <script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
-import JetButton from '@/Jetstream/Button.vue';
-import JetFormSection from '@/Jetstream/FormSection.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetInputError from '@/Jetstream/InputError.vue';
-import JetLabel from '@/Jetstream/Label.vue';
+import FormSection from '@/Components/FormSection.vue'
+import InputError from '@/Components/InputError.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import TextInput from '@/Components/TextInput.vue'
+import { useForm } from '@inertiajs/inertia-vue3'
 
 const form = useForm({
-    name: '',
-});
+  name: '',
+})
 
 const createTeam = () => {
-    form.post(route('teams.store'), {
-        errorBag: 'createTeam',
-        preserveScroll: true,
-    });
-};
+  form.post(route('teams.store'), {
+    errorBag: 'createTeam',
+    preserveScroll: true,
+  })
+}
 </script>
 
 <template>
-    <JetFormSection @submitted="createTeam">
-        <template #title>
-            {{ $t('Team Details') }}
-        </template>
+  <FormSection @submitted="createTeam">
+    <template #title>
+      {{ $t('Team Details') }}
+    </template>
 
-        <template #description>
-            {{ $t('Create a new team to collaborate with others on projects.') }}
-        </template>
+    <template #description>
+      {{ $t('Create a new team to collaborate with others on projects.') }}
+    </template>
 
-        <template #form>
-            <div class="col-span-6">
-                <JetLabel :value="$t('Team Owner')" />
+    <template #form>
+      <div class="col-span-6">
+        <InputLabel :value="$t('Team Owner')" />
 
-                <div class="flex items-center mt-2">
-                    <img class="object-cover w-12 h-12 rounded-full" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name">
+        <div class="flex items-center mt-2">
+          <img
+            class="object-cover w-12 h-12 rounded-full"
+            :src="$page.props.user.profile_photo_url"
+            :alt="$page.props.user.name"
+          />
 
-                    <div class="ml-4 leading-tight">
-                        <div>{{ $page.props.user.name }}</div>
-                        <div class="text-sm text-gray-700">
-                            {{ $page.props.user.email }}
-                        </div>
-                    </div>
-                </div>
+          <div class="ml-4 leading-tight">
+            <div>{{ $page.props.user.name }}</div>
+            <div class="text-sm text-gray-700">
+              {{ $page.props.user.email }}
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div class="col-span-6 sm:col-span-4">
-                <JetLabel for="name" :value="$t('Team Name')" />
-                <JetInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="block w-full mt-1"
-                    autofocus
-                />
-                <JetInputError :message="form.errors.name" class="mt-2" />
-            </div>
-        </template>
+      <div class="col-span-6 sm:col-span-4">
+        <InputLabel for="name" :value="$t('Team Name')" />
+        <TextInput
+          id="name"
+          v-model="form.name"
+          type="text"
+          class="block w-full mt-1"
+          autofocus
+        />
+        <InputError :message="form.errors.name" class="mt-2" />
+      </div>
+    </template>
 
-        <template #actions>
-            <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                {{ $t('Create') }}
-            </JetButton>
-        </template>
-    </JetFormSection>
+    <template #actions>
+      <PrimaryButton
+        :class="{ 'opacity-25': form.processing }"
+        :disabled="form.processing"
+      >
+        {{ $t('Create') }}
+      </PrimaryButton>
+    </template>
+  </FormSection>
 </template>

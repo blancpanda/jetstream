@@ -1,7 +1,7 @@
 <script setup>
-import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue'
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue'
-import JetButton from '@/Jetstream/Button.vue'
+import AuthenticationCard from '@/Components/AuthenticationCard.vue'
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3'
 import { computed } from 'vue'
 
@@ -23,9 +23,9 @@ const verificationLinkSent = computed(
 <template>
   <Head title="Email Verification" />
 
-  <JetAuthenticationCard>
+  <AuthenticationCard>
     <template #logo>
-      <JetAuthenticationCardLogo />
+      <AuthenticationCardLogo />
     </template>
 
     <div class="mb-4 text-sm text-gray-600">
@@ -49,12 +49,12 @@ const verificationLinkSent = computed(
 
     <form @submit.prevent="submit">
       <div class="mt-4 flex items-center justify-between">
-        <JetButton
+        <PrimaryButton
           :class="{ 'opacity-25': form.processing }"
           :disabled="form.processing"
         >
           {{ $t('Resend Verification Email') }}
-        </JetButton>
+        </PrimaryButton>
 
         <div>
           <Link
@@ -75,5 +75,5 @@ const verificationLinkSent = computed(
         </div>
       </div>
     </form>
-  </JetAuthenticationCard>
+  </AuthenticationCard>
 </template>
